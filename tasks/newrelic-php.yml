@@ -1,0 +1,18 @@
+---
+
+- name: Place New Relic configuration file
+  when: newrelic_installed | success
+  lineinfile: >
+    dest=/etc/php/{{ php_version }}/mods-available/newrelic.ini
+    state=present
+    regexp='^(|;){{ item.key }} ='
+    line='{{ item.key }} = "{{ item.value }}"'
+  with_items:
+    - { key: 'newrelic.enabled',  value: '{{ nr_php_enabled }}' }
+    - { key: 'newrelic.license',  value: '{{ nr_key }}' }
+    - { key: 'newrelic.logfile',  value: '{{ nr_php_logfile }}' }
+    - { key: 'newrelic.loglevel', value: '{{ nr_php_loglevel }}' }
+    - { key: 'newrelic.appname',  value: '{{ nr_app_name }}' }
+
+- name: Enable New Relic php module
+  shell: /usr/sbin/phpenmod newrelic

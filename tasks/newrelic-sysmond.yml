@@ -1,0 +1,25 @@
+---
+
+- name: Add key > New Relic System Monitor
+  when: newrelic_installed | success
+  lineinfile: >
+    dest=/etc/newrelic/nrsysmond.cfg
+    state=present
+    regexp='^{{ item.key }}'
+    line='{{ item.key }}={{ item.value }}'
+  with_items:
+    - { key: 'license_key', value: '{{ nr_sysmond_key }}'}
+    - { key: 'log_level', value: '{{ nr_sysmond_log_level }}'}
+    - { key: 'logfile', value: '{{ nr_sysmond_logfile }}'}
+  notify: restart nrsysmond
+
+- name: Configure Optional New Relic System Monitor settings
+  when: newrelic_installed | success
+  lineinfile: >
+    dest=/etc/newrelic/nrsysmond.cfg
+    state=present
+    regexp='^(|#){{ item.key }}='
+    line='{{ item.key }}={{ item.value }}'
+  with_items:
+    - { key: 'ssl', value: 'true'}
+  notify: restart nrsysmond

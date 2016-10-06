@@ -1,0 +1,31 @@
+---
+
+##################################
+# New Relic
+#################################
+
+- name: Install GPG key
+  apt_key: url="{{ newrelic_gpg_url }}" state=present
+  register: gpg_key_installed
+
+- name: Place repo configuration
+  when: gpg_key_installed | success
+  copy: >
+    content="{{ newrelic_deb }}"
+    dest="/etc/apt/sources.list.d/newrelic.list"
+    owner=root
+    group=root
+    mode=0440
+  register: newrelic_repo_installed
+
+- name: Install New Relic packages
+  when: newrelic_repo_installed | success and {{ newrelic_install }}
+  apt: pkg="{{ item }}" state=latest update_cache=yes
+  with_items: "{{ newrelic_packages }}"
+  register: newrelic_installed
+
+- name: Include New Relic System Monitor
+  include: newrelic-sysmond.yml
+
+- name: Include New Relic PHP daemon
+  include: newrelic-php.yml

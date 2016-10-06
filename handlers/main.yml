@@ -1,0 +1,15 @@
+---
+
+# New Relic System Monitor
+- name: restart nrsysmond
+  service: >
+    name=newrelic-sysmond
+    enabled=yes
+    state=restarted
+
+# PHP{{ php_version }}-FPM process
+- name: restart php{{ php_version }}-fpm
+  service: >
+    name=php{{ php_version }}-fpm
+    enabled=yes
+    state=restarted

@@ -1,0 +1,20 @@
+---
+# default variables
+# please overwrite in the playbook.yml
+
+php_version: 7.0
+newrelic_install: true
+
+nr_key: "ANSIBLE_SAYS_REPLACE_WITH_REAL_KEY"
+nr_app_name: "ANSIBLE_SAYS_REPLACE_WITH_REAL_NAME"
+nr_sysmond_key: "ANSIBLE_SAYS_REPLACE_WITH_REAL_KEY"
+nr_sysmond_log_level: info
+nr_sysmond_logfile: /var/log/newrelic/nrsysmond.log
+
+newrelic_packages:
+  - newrelic-sysmond
+  - newrelic-php5 # for php 5.*/7.*
+
+nr_php_enabled: "true"
+nr_php_logfile: /var/log/newrelic/php_agent.log
+nr_php_loglevel: info

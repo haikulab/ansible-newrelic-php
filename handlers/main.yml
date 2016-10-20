@@ -8,7 +8,7 @@
     state=restarted
 
 # PHP{{ php_version }}-FPM process
-- name: restart php{{ php_version }}-fpm
+- name: restart php-fpm
   service: >
     name=php{{ php_version }}-fpm
     enabled=yes

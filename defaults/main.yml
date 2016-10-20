@@ -13,7 +13,7 @@ nr_sysmond_logfile: /var/log/newrelic/nrsysmond.log
 
 newrelic_packages:
   - newrelic-sysmond
-  - newrelic-php5 # for php 5.*/7.*
+  - newrelic-php5 # works for php 5.x and 7.x
 
 nr_php_enabled: "true"
 nr_php_logfile: /var/log/newrelic/php_agent.log

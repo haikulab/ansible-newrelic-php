@@ -1,7 +1,11 @@
 ---
 
+- name: Check if configuration file ecists
+  stat: path=/etc/php/{{ php_version }}/mods-available/newrelic.ini
+  register: newrelic_config_exists
+
 - name: Place New Relic configuration file
-  when: newrelic_installed | success
+  when: (newrelic_installed | success) and (newrelic_config_exists | success)
   lineinfile: >
     dest=/etc/php/{{ php_version }}/mods-available/newrelic.ini
     state=present
@@ -13,6 +17,4 @@
     - { key: 'newrelic.logfile',  value: '{{ nr_php_logfile }}' }
     - { key: 'newrelic.loglevel', value: '{{ nr_php_loglevel }}' }
     - { key: 'newrelic.appname',  value: '{{ nr_app_name }}' }
-
-- name: Enable New Relic php module
-  shell: /usr/sbin/phpenmod newrelic
+  notify: restart php-fpm
